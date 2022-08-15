@@ -5,17 +5,16 @@
     const parent = document.getElementById("items");
 
         for (let i=0; i < value.length; i++) {
-            console.log(i +' position in the array ' + value[i].description);
 
             const newAnchorLink = document.createElement("a");
-            newAnchorLink.href = `https://www.google.com/search?q=${value[i].name}`;
+            newAnchorLink.href = `../html/product.html?id=${value[i]._id}`;
             parent.appendChild(newAnchorLink);
 
             const newArticle = document.createElement('article');
 
             const newImage = document.createElement('img');
             newImage.src = `/back/images/kanap0${i+1}.jpeg`;
-            newImage.alt = `Lorem ipsum dolor sit amet, Kanap name${i}`;
+            newImage.alt = `${value[i].altTxt}`;
 
             const newTitle = document.createElement("h3");
             newTitle.innerText = value[i].name;
@@ -34,4 +33,5 @@
     for (let element of value) {
         console.log("Boucle for:" + element.name);
     }
+
 })();
