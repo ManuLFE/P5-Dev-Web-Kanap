@@ -6,11 +6,11 @@ let product_id = params.get('id');
 // Defining cart functions
 
 // Save the cart in the localStorage
-
 function saveCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+// Return the cart
 function getCart() {
     let cart = localStorage.getItem("cart");
     if (cart == null) {
@@ -29,17 +29,7 @@ function addCart(currentProduct) {
 
         // define a new product quantity, using the previous quantity in the localstorage and the new one defined by the user on the page.
         let newProductQuantity = parseFloat(duplicateProductColor.quantity) + parseFloat(currentProduct.quantity);
-        console.log(newProductQuantity);
-        duplicateProductColor.quantity = newProductQuantity;
-
-        // utilisation d'une boucle pour loop dans l'objet JS "cart" afin de sélectionner l'objet que nous sommes en train de visualiser et récupérer l'ancienne quantité de ce dernier.
-        let parsedCart = JSON.parse(localStorage.getItem("cart"))
-
-        for (let cartProducts of parsedCart) {
-            if (cartProducts.id === product_id) {
-                cartProducts.quantity += 100;
-            }
-        }
+        duplicateProductColor.quantity = JSON.stringify(newProductQuantity);
 
     } else {
 
@@ -83,13 +73,11 @@ function addCart(currentProduct) {
             productColors.innerText = `${color}`;
             productColors.value = `${color}`;
             colorsEl.appendChild(productColors);
-            console.log(color);
         }
     } else {
         console.log('error')
     }
     }
-
 
     // Adding behavior to the addToCart button
     const buttonEl = document.getElementById("addToCart");
