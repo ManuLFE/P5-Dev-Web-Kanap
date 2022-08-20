@@ -127,15 +127,20 @@
                 console.log(totalPricing)
             }
             printPrices()
-
         }
     }
 
-    // loop with "i" to add all products quantities --- REMPLACER PAR UNE FONCTION ---
+    let totalPrice = 0;
+    totalPrice = totalPricing.reduce(
+        (previousValue, currentValue) => previousValue + currentValue, totalPrice
+    );
+    document.getElementById('totalPrice').innerHTML = totalPrice;
+
+    // loop with "i" to add all products quantities --- REMPLACER PAR UNE FONCTION ? ---
     let totalItemsQuantity = 0
     for (let i = 0; i < cart.length; i++) {
         totalItemsQuantity += parseInt(JSON.parse(localStorage.getItem("cart"))[i].quantity)
-        console.log(totalItemsQuantity)
+        console.log('quantité totale de produits dans le panier:' + totalItemsQuantity)
         // get span totalQuantity to display number of articles in the cart
         document.getElementById('totalQuantity').innerHTML = JSON.stringify(totalItemsQuantity)
     }
@@ -146,6 +151,20 @@
   /*  fetch("http://localhost:3000/api/products")
         .then((response) => response.json())
         .then((data) => console.log(data))*/
+
+
+// product.js:
+// - remplacer api global par API produit en ajoutant '+product+id' à la fin de l'URL
+// - changer la loop avec la variable i par value.name / value.url etc
+// - enlever boucle for dans product.js ?
+
+// general:
+// Ajouter alert + nom + qté quand clic sur "ajouter au panier"
+// Trier panier par ordre alphabétique (remplacer 0 1 2 dans le panier par nom du canapé + couleur et trier par nom de l'index afin de faire un tri alphabétique général)
+// let totalPrice = 0; totalPrice += elements.quantity * elementsAPI.price
+// totalPricing = []       totalPrice = totalPricing.reduce((previous, next) => previous + next, totalPrice)
+// Quand commande validée PUIS réponse API, localStorage.clear() OU clear uniquement clé "cart"
+
 
 
 

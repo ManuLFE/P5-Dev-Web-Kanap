@@ -37,11 +37,12 @@ function addCart(currentProduct) {
 
     }
     saveCart(cart);
+
 }
 
 
 (async () => {
-    const result = await fetch("http://localhost:3000/api/products");
+    const result = await fetch("http://localhost:3000/api/products/" + product_id);
     const value = await result.json();
 
     const imgParentEl = document.getElementsByClassName('item__img')[0]
@@ -53,31 +54,26 @@ function addCart(currentProduct) {
 
 
     // Loops through the API response to dynamically display the product information matching the ID in the webpage URL //
-    for (let i = 0; i < value.length; i++) {
-    if (product_id === value[i]._id) {
 
-        document.querySelector('title').textContent =  `${value[i].name}`;
+        document.querySelector('title').textContent =  `${value.name}`;
 
         const productImage = document.createElement('img');
-        productImage.src = `/back/images/kanap0${i+1}.jpeg`;
-        productImage.alt = `${value[i].altTxt}`;
+        productImage.src = `${value.imageUrl}`;
+        productImage.alt = `${value.altTxt}`;
         imgParentEl.appendChild(productImage)
 
-        titleEl.innerText = `${value[i].name}`
-        priceEl.innerText = `${value[i].price}`
-        descriptionEl.innerText = `${value[i].description}`
+        titleEl.innerText = `${value.name}`
+        priceEl.innerText = `${value.price}`
+        descriptionEl.innerText = `${value.description}`
 
         // Loop for iterating over the colors array in the API response //
-        for (let color of value[i].colors) {
+        for (let color of value.colors) {
             const productColors = document.createElement('option');
             productColors.innerText = `${color}`;
             productColors.value = `${color}`;
             colorsEl.appendChild(productColors);
         }
-    } else {
-        console.log('error')
-    }
-    }
+
 
     // Adding behavior to the addToCart button
     const buttonEl = document.getElementById("addToCart");
@@ -87,6 +83,13 @@ function addCart(currentProduct) {
             color: document.getElementById("colors").value,
             quantity: document.getElementById("quantity").value
         });
+        if (quantityEl.value === '1') {
+            alert(`Vous avez ajouté ${quantityEl.value} canapé ${value.name} à votre panier`);
+            console.log("singulier")
+        } else {
+            alert(`Vous avez ajouté ${quantityEl.value} canapés ${value.name} à votre panier`);
+            console.log("pluriel")
+        }
     })
 
 })();
