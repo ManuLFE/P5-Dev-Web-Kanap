@@ -9,6 +9,7 @@
         localStorage.setItem("cart", JSON.stringify(cart));
     }
 
+    // SORT CART WITH LOCALCOMPARE or SORT ?
     function getCart() {
         let cart = localStorage.getItem("cart");
         if (cart == null) {
@@ -20,7 +21,6 @@
 
     let cart = getCart()
     const mainParentElement = document.getElementById("cart__items")
-
 
     for (let elements of cart) {
         const elementsInCartId = [];
@@ -99,6 +99,25 @@
                 console.log(cart);
                 // stringify JSONed cart and replace the previous cart in the localStorage ---UTILISER UNE FONCTION--
                 localStorage.setItem("cart", JSON.stringify(cart));
+
+                // copied code to recalculate total quantity
+                let totalItemsQuantity = 0;
+                for (let i = 0; i < cart.length; i++) {
+                    totalItemsQuantity += parseInt(JSON.parse(localStorage.getItem("cart"))[i].quantity)
+                    console.log('quantité totale de produits dans le panier:' + totalItemsQuantity)
+                    // get span totalQuantity to display number of articles in the cart
+                    document.getElementById('totalQuantity').innerHTML = JSON.stringify(totalItemsQuantity)
+                }
+
+                // copied code to recalculate pricing
+                let elementPrice = 0;
+                let totalPricing = [];
+                elementPrice = elementsAPI.price * elements.quantity
+                totalPricing.push(elementPrice)
+                const initialPricing = 0;
+                const finalPricing = totalPricing.reduce((previousValue, currentValue) => previousValue + currentValue, initialPricing)
+                document.getElementById('totalPrice').innerText = finalPricing
+
             })
 
             // Delete div + delete clickable 'p'
@@ -111,30 +130,25 @@
             deleteItemEl.innerText = 'supprimer'
             settingsDelete.appendChild(deleteItemEl)
 
-            const deleteItemBtn = document.querySelector('.deleteItem')
-            deleteItemBtn.addEventListener('mouseover', function() {
-                console.log('btn working')
-            })
+            let deleteItemBtn = document.querySelectorAll('.deleteItem')
+            console.log(deleteItemBtn)
 
-            // get span totalPrice to display cart total price
-            document.getElementById('totalPrice').innerText = ''
 
             // function to console log total price of each product including its quantity
-            printPrices = () => {
-                let totalPricing = []
-                console.log(elementsAPI.price * elements.quantity)
-                totalPricing.push(elementsAPI.price * elements.quantity)
-                console.log(totalPricing)
+            // get span totalPrice to display cart total price
+            renderPricing = () => {
+                let elementPrice = 0;
+                let totalPricing = [];
+                elementPrice = elementsAPI.price * elements.quantity
+                totalPricing.push(elementPrice)
+                const initialPricing = 0;
+                let finalPricing = totalPricing.reduce((previousValue, currentValue) => previousValue + currentValue, initialPricing)
+                document.getElementById('totalPrice').innerText = finalPricing
             }
-            printPrices()
         }
+        renderPricing()
     }
 
-    let totalPrice = 0;
-    totalPrice = totalPricing.reduce(
-        (previousValue, currentValue) => previousValue + currentValue, totalPrice
-    );
-    document.getElementById('totalPrice').innerHTML = totalPrice;
 
     // loop with "i" to add all products quantities --- REMPLACER PAR UNE FONCTION ? ---
     let totalItemsQuantity = 0
