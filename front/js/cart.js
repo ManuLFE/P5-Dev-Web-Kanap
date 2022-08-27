@@ -18,7 +18,6 @@ const mainParentElement = document.getElementById("cart__items")
 const elementsInCartId = [];
 for (let elements of cart) {
     elementsInCartId.push(elements.id);
-    console.log(elementsInCartId);
 
     const newArticle = document.createElement('article');
     newArticle.dataset.id = elements.id
@@ -29,7 +28,6 @@ for (let elements of cart) {
     const divImg = document.createElement('div')
     divImg.classList.add("cart__item__img")
     newArticle.appendChild(divImg);
-
 
     const image = document.createElement('img')
     image.src = elements.imageUrl
@@ -51,19 +49,6 @@ for (let elements of cart) {
     const descriptionColor = document.createElement('p')
     descriptionColor.innerText = elements.color
     divDescription.appendChild(descriptionColor)
-
-
-        // PRICING FROM API
-        /*const descriptionPrice = document.createElement('p')
-        descriptionPrice.innerText = `${elementsAPI.price}€`
-        divDescription.appendChild(descriptionPrice)*/
-        //
-
-       /* (async () => {
-            const result = await fetch("http://localhost:3000/api/products/" + elements.id);
-            const elementAPI = await result.json();
-            console.log('price from API ' + elementAPI.price)
-        })();*/
 
     const descriptionPrice = document.createElement('p')
     divDescription.appendChild(descriptionPrice)
@@ -117,8 +102,7 @@ for (let elements of cart) {
     console.log(deleteItemBtn)
 
 
-    // function to console log total price of each product including its quantity
-    // get span totalPrice to display cart total price
+    // Render pricing for each product before reducing it to display the final pricing
     renderPricing = () => {
         let elementPrice = 0;
         const initialPricing = 0;
@@ -133,13 +117,12 @@ for (let elements of cart) {
                     elementPrice = data.price * elementQuantity
                     totalPricing.push(elementPrice)
                     finalPricing = totalPricing.reduce((previousValue, currentValue) => previousValue + currentValue, initialPricing)
-                    console.log(finalPricing)
                     document.getElementById('totalPrice').innerText = finalPricing
                 })
-
         }
     }
 
+    // Gets quantity from each product in cart, reduce it to display the total quantity
     renderQuantity = () => {
         let totalQuantity = [];
         let finalQuantity = 0;
@@ -154,6 +137,7 @@ for (let elements of cart) {
 
 }
 
+// Initialize pricing and quantity at page load
 renderPricing()
 renderQuantity()
 
