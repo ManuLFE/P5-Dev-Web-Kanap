@@ -53,8 +53,6 @@ function addCart(currentProduct) {
     const quantityEl = document.getElementById("quantity")
 
 
-    // Loops through the API response to dynamically display the product information matching the ID in the webpage URL //
-
         document.querySelector('title').textContent =  `${value.name}`;
 
         const productImage = document.createElement('img');
@@ -80,9 +78,13 @@ function addCart(currentProduct) {
     buttonEl.addEventListener("click", function() {
         addCart({
             id: product_id,
+            name: value.name,
             color: document.getElementById("colors").value,
-            quantity: document.getElementById("quantity").value
+            quantity: document.getElementById("quantity").value,
+            imageUrl: value.imageUrl,
+            imageAlt: value.altTxt
         });
+
         if (quantityEl.value === '1') {
             alert(`Vous avez ajouté ${quantityEl.value} canapé ${value.name} à votre panier`);
             console.log("singulier")
