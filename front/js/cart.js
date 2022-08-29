@@ -147,11 +147,9 @@ for (let elements of cart) {
 
     //---------------- END - FUNCTIONS ----------------//
 
-
 // Initialize pricing and quantity at page load
 renderPricing()
 renderQuantity()
-
 
     //---------------- REGEX - FORM ----------------//
 
@@ -199,7 +197,7 @@ document.getElementById('lastName').addEventListener('change', function() {
     validatelastName(lastNameEl.value);
 })
 
-// REGEX - Address
+// REGEX - address
 function validateAddress(address) {
     let answerTest
     let re = /^(\d+) ([a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+) [ -_+]?(\w{0,8})/
@@ -265,8 +263,42 @@ document.getElementById('email').addEventListener('change', function() {
     validateEmail(emailEl.value);
 })
 
+    //---------------- Submit Button Behavior ----------------//
+sendForm = async() => {
+    let userData = {};
+    if (document.getElementById('firstName').value && document.getElementById('lastName').value && document.getElementById('address').value && document.getElementById('city').value && document.getElementById('email').value )
+    {
+        // location.href = '../html/confirmation.html'
+        userData = {
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            address: document.getElementById('address').value,
+            city: document.getElementById('city').value,
+            email: document.getElementById('email').value
+        }
+        // view created object + cart
+        console.log(userData)
+        console.log(cart)
 
+        // POST request to API
+        let response = await fetch('http://localhost:3000/api/products/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: userData
+        });
 
+        let result = response.json();
+        alert(result.message);
+
+    } else {
+        console.log('error')
+    }
+}
+
+let orderButtonEl = document.getElementById('order')
+orderButtonEl.addEventListener('click', sendForm)
 
 
 
