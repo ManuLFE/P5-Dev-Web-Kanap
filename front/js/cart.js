@@ -98,9 +98,17 @@ for (let elements of cart) {
     deleteItemEl.innerText = 'supprimer'
     settingsDelete.appendChild(deleteItemEl)
 
-    let deleteItemBtn = document.querySelectorAll('.deleteItem')
-    console.log(deleteItemBtn)
+    deleteItemEl.addEventListener('click', function () {
+        let cart = getCart();
+        cart = cart.filter(p => p.id !== elements.id)
 
+        renderPricing();
+        renderQuantity();
+        saveCart(cart);
+        window.location.reload();
+    })
+
+    //---------------- FUNCTIONS ----------------//
 
     // Render pricing for each product before reducing it to display the final pricing
     renderPricing = () => {
@@ -131,16 +139,131 @@ for (let elements of cart) {
             let productQuantity = elements.quantity
             totalQuantity.push(productQuantity)
             finalQuantity = totalQuantity.reduce((preValue, curValue) => parseInt(preValue) + parseInt(curValue))
-            document.getElementById('totalQuantity').innerHTML = JSON.stringify(finalQuantity)
+            document.getElementById('totalQuantity').innerHTML = finalQuantity
         }
     }
 
 }
 
+    //---------------- END - FUNCTIONS ----------------//
+
+
 // Initialize pricing and quantity at page load
 renderPricing()
 renderQuantity()
 
+
+    //---------------- REGEX - FORM ----------------//
+
+// REGEX - firstName
+function validateFirstName(name) {
+    let answerTest
+    let re = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u
+    answerTest = re.test(name)
+
+    if (answerTest === false) {
+        document.getElementById('firstName').style.border = '3px solid red'
+        document.getElementById('firstNameErrorMsg').innerText = 'Prénom Invalide'
+        document.getElementById('firstNameErrorMsg').style.display = 'block';
+        document.getElementById('firstNameErrorMsg').style.fontWeight = '600';
+    } else if (answerTest === true) {
+        document.getElementById('firstName').style.border = '3px solid limegreen'
+        document.getElementById('firstNameErrorMsg').style.display = 'none';
+    }
+}
+
+document.getElementById('firstName').addEventListener('change', function() {
+    let firstNameEl = document.getElementById('firstName');
+    validateFirstName(firstNameEl.value);
+})
+
+// REGEX - lastName
+function validatelastName(name) {
+    let answerTest
+    let re = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u
+    answerTest = re.test(name)
+
+    if (answerTest === false) {
+        document.getElementById('lastName').style.border = '3px solid red'
+        document.getElementById('lastNameErrorMsg').innerText = 'Nom Invalide'
+        document.getElementById('lastNameErrorMsg').style.display = 'block';
+        document.getElementById('lastNameErrorMsg').style.fontWeight = '600';
+    } else if (answerTest === true) {
+        document.getElementById('lastName').style.border = '3px solid limegreen'
+        document.getElementById('lastNameErrorMsg').style.display = 'none';
+    }
+}
+
+document.getElementById('lastName').addEventListener('change', function() {
+    let lastNameEl = document.getElementById('lastName');
+    validatelastName(lastNameEl.value);
+})
+
+// REGEX - Address
+function validateAddress(address) {
+    let answerTest
+    let re = /^(\d+) ([a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+) [ -_+]?(\w{0,8})/
+    answerTest = re.test(address)
+
+    if (answerTest === false) {
+        document.getElementById('address').style.border = '3px solid red'
+        document.getElementById('addressErrorMsg').innerText = 'Adresse Invalide'
+        document.getElementById('addressErrorMsg').style.display = 'block';
+        document.getElementById('addressErrorMsg').style.fontWeight = '600';
+    } else if (answerTest === true) {
+        document.getElementById('address').style.border = '3px solid limegreen'
+        document.getElementById('addressErrorMsg').style.display = 'none';
+    }
+}
+
+document.getElementById('address').addEventListener('change', function() {
+    let addressEl = document.getElementById('address');
+    validateAddress(addressEl.value);
+})
+
+// REGEX - city
+function validateCity(city) {
+    let answerTest
+    let re = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u
+    answerTest = re.test(city)
+
+    if (answerTest === false) {
+        document.getElementById('city').style.border = '3px solid red'
+        document.getElementById('cityErrorMsg').innerText = 'Nom De Ville Invalide'
+        document.getElementById('cityErrorMsg').style.display = 'block';
+        document.getElementById('cityErrorMsg').style.fontWeight = '600';
+    } else if (answerTest === true) {
+        document.getElementById('city').style.border = '3px solid limegreen'
+        document.getElementById('cityErrorMsg').style.display = 'none';
+    }
+}
+
+document.getElementById('city').addEventListener('change', function() {
+    let cityEl = document.getElementById('city');
+    validateCity(cityEl.value);
+})
+
+// REGEX - email
+function validateEmail(email) {
+    let answerTest
+    let re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
+    answerTest = re.test(email)
+
+    if (answerTest === false) {
+        document.getElementById('email').style.border = '3px solid red'
+        document.getElementById('emailErrorMsg').innerText = 'Email Invalide'
+        document.getElementById('emailErrorMsg').style.display = 'block';
+        document.getElementById('emailErrorMsg').style.fontWeight = '600';
+    } else if (answerTest === true) {
+        document.getElementById('email').style.border = '3px solid limegreen'
+        document.getElementById('emailErrorMsg').style.display = 'none';
+    }
+}
+
+document.getElementById('email').addEventListener('change', function() {
+    let emailEl = document.getElementById('email');
+    validateEmail(emailEl.value);
+})
 
 
 
