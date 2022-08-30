@@ -40,7 +40,9 @@ for (let elements of cart) {
 
     const divDescription = document.createElement('div')
     divDescription.classList.add('cart__item__content__description')
+    divDescription.setAttribute(`id`,`cart-item-content-description`);
     divContent.appendChild(divDescription)
+    // ajouter id pour appendChild dans renderPricing()
 
     const descriptionTitle = document.createElement('h2')
     descriptionTitle.innerText = elements.name
@@ -50,11 +52,14 @@ for (let elements of cart) {
     descriptionColor.innerText = elements.color
     divDescription.appendChild(descriptionColor)
 
-    const descriptionPrice = document.createElement('p')
+   const descriptionPrice = document.createElement('p')
+    descriptionPrice.setAttribute(`id`, `item-pricing`)
+    descriptionPrice.innerText = 'placeholder'
     divDescription.appendChild(descriptionPrice)
-    fetch('http://localhost:3000/api/products/' + elements.id)
+    /*fetch('http://localhost:3000/api/products/' + elements.id)
         .then((response) => response.json())
-        .then((data) => descriptionPrice.innerText = `${data.price}€`)
+        .then((data) => descriptionPrice.innerText = `${data.price}€`)*/
+    // ajouter id pour appendChild dans renderPricing() + supprimer prix précédent si afficher (avec paramètre dans renderPricing() par exemple
 
     const divContentSettings = document.createElement('div')
     divContentSettings.classList.add('cart__item__content__settings')
@@ -108,41 +113,58 @@ for (let elements of cart) {
         window.location.reload();
     })
 
-    //---------------- FUNCTIONS ----------------//
+}
 
-    // Render pricing for each product before reducing it to display the final pricing
-    renderPricing = () => {
-        let elementPrice = 0;
-        const initialPricing = 0;
-        let totalPricing = [];
-        let finalPricing = 0;
+//---------------- FUNCTIONS ----------------//
 
-        for (elements of cart) {
-            let elementQuantity = elements.quantity
-            fetch('http://localhost:3000/api/products/' + elements.id)
-                .then((response) => response.json())
-                .then((data) => {
-                    elementPrice = data.price * elementQuantity
-                    totalPricing.push(elementPrice)
-                    finalPricing = totalPricing.reduce((previousValue, currentValue) => previousValue + currentValue, initialPricing)
-                    document.getElementById('totalPrice').innerText = finalPricing
-                })
-        }
+// Render pricing for each product before reducing it to display the final pricing
+renderPricing = () => {
+    let cart = getCart();
+    let elementPrice = 0;
+    const initialPricing = 0;
+    let totalPricing = [];
+    let finalPricing = 0;
+
+
+    for (let elements of cart) {
+        let elementQuantity = elements.quantity
+
+
+        // get the container div including item content and create the <p> for each item price
+        let divDescription = document.getElementById('cart-item-content-description')
+        let descriptionPrice = document.createElement('p')
+        descriptionPrice.setAttribute(`id`, `item-pricing`)
+        divDescription.appendChild(descriptionPrice)
+
+
+        fetch('http://localhost:3000/api/products/' + elements.id)
+            .then((response) => response.json())
+            .then((data) => {
+                // Set the final pricing by adding all the product prices together
+                elementPrice = data.price * elementQuantity
+                totalPricing.push(elementPrice)
+                finalPricing = totalPricing.reduce((previousValue, currentValue) => previousValue + currentValue, initialPricing)
+                document.getElementById('totalPrice').innerText = finalPricing
+
+                // prints each price
+                descriptionPrice.innerText = data.price
+            })
+
     }
+}
 
-    // Gets quantity from each product in cart, reduce it to display the total quantity
-    renderQuantity = () => {
-        let totalQuantity = [];
-        let finalQuantity = 0;
+// Gets quantity from each product in cart, reduce it to display the total quantity
+renderQuantity = () => {
+    let cart = getCart();
+    let totalQuantity = [];
+    let finalQuantity = 0;
 
-        for (elements of cart) {
-            let productQuantity = elements.quantity
-            totalQuantity.push(productQuantity)
-            finalQuantity = totalQuantity.reduce((preValue, curValue) => parseInt(preValue) + parseInt(curValue))
-            document.getElementById('totalQuantity').innerHTML = finalQuantity
-        }
+    for (let elements of cart) {
+        let productQuantity = elements.quantity
+        totalQuantity.push(productQuantity)
+        finalQuantity = totalQuantity.reduce((preValue, curValue) => parseInt(preValue) + parseInt(curValue))
+        document.getElementById('totalQuantity').innerHTML = finalQuantity
     }
-
 }
 
     //---------------- END - FUNCTIONS ----------------//
@@ -156,7 +178,7 @@ renderQuantity()
 // REGEX - firstName
 function validateFirstName(name) {
     let answerTest
-    let re = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u
+    let re = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð '-]+$/u
     answerTest = re.test(name)
 
     if (answerTest === false) {
@@ -178,7 +200,7 @@ document.getElementById('firstName').addEventListener('change', function() {
 // REGEX - lastName
 function validatelastName(name) {
     let answerTest
-    let re = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u
+    let re = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð '-]+$/u
     answerTest = re.test(name)
 
     if (answerTest === false) {
@@ -200,7 +222,7 @@ document.getElementById('lastName').addEventListener('change', function() {
 // REGEX - address
 function validateAddress(address) {
     let answerTest
-    let re = /^(\d+) ([a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+) [ -_+]?(\w{0,8})/
+    let re = /^(\d+) ([a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð '-]+) [ -_+]?(\w{0,8})/
     answerTest = re.test(address)
 
     if (answerTest === false) {
@@ -269,16 +291,22 @@ sendForm = async() => {
     if (document.getElementById('firstName').value && document.getElementById('lastName').value && document.getElementById('address').value && document.getElementById('city').value && document.getElementById('email').value )
     {
         // location.href = '../html/confirmation.html'
-        userData = {
-            firstName: document.getElementById('firstName').value,
-            lastName: document.getElementById('lastName').value,
-            address: document.getElementById('address').value,
-            city: document.getElementById('city').value,
-            email: document.getElementById('email').value
+
+        let productIDs = [];
+        for(let elements of getCart()) {
+            productIDs.push(elements.id);
         }
-        // view created object + cart
-        console.log(userData)
-        console.log(cart)
+
+        userData = {
+            "contact": {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                email: document.getElementById('email').value
+            },
+            "products": productIDs
+        }
 
         // POST request to API
         let response = await fetch('http://localhost:3000/api/products/order', {
@@ -297,8 +325,8 @@ sendForm = async() => {
     }
 }
 
-let orderButtonEl = document.getElementById('order')
-orderButtonEl.addEventListener('click', sendForm)
+let orderButtonEl = document.getElementsByClassName('cart__order__form')[0]
+orderButtonEl.addEventListener('submit', sendForm)
 
 
 
