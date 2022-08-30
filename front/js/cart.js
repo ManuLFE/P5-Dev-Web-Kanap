@@ -40,7 +40,7 @@ for (let elements of cart) {
 
     const divDescription = document.createElement('div')
     divDescription.classList.add('cart__item__content__description')
-    divDescription.setAttribute(`id`,`cart-item-content-description`);
+    divDescription.setAttribute(`class`,`itemDiv`);
     divContent.appendChild(divDescription)
     // ajouter id pour appendChild dans renderPricing()
 
@@ -53,13 +53,13 @@ for (let elements of cart) {
     divDescription.appendChild(descriptionColor)
 
    const descriptionPrice = document.createElement('p')
-    descriptionPrice.setAttribute(`id`, `item-pricing`)
+    descriptionPrice.setAttribute('id', 'itemPricing')
     descriptionPrice.innerText = 'placeholder'
     divDescription.appendChild(descriptionPrice)
     /*fetch('http://localhost:3000/api/products/' + elements.id)
         .then((response) => response.json())
-        .then((data) => descriptionPrice.innerText = `${data.price}€`)*/
-    // ajouter id pour appendChild dans renderPricing() + supprimer prix précédent si afficher (avec paramètre dans renderPricing() par exemple
+        .then((data) => descriptionPrice.innerText = `${data.price}€`)
+    // ajouter id pour appendChild dans renderPricing() + supprimer prix précédent si afficher (avec paramètre dans renderPricing() par exemple*/
 
     const divContentSettings = document.createElement('div')
     divContentSettings.classList.add('cart__item__content__settings')
@@ -129,13 +129,8 @@ renderPricing = () => {
     for (let elements of cart) {
         let elementQuantity = elements.quantity
 
-
-        // get the container div including item content and create the <p> for each item price
-        let divDescription = document.getElementById('cart-item-content-description')
-        let descriptionPrice = document.createElement('p')
-        descriptionPrice.setAttribute(`id`, `item-pricing`)
-        divDescription.appendChild(descriptionPrice)
-
+        document.getElementsByClassName('itemDiv')[0].style.border = '3px solid red'
+        document.getElementsByClassName('itemDiv')[1].style.border = '3px solid green'
 
         fetch('http://localhost:3000/api/products/' + elements.id)
             .then((response) => response.json())
@@ -147,7 +142,7 @@ renderPricing = () => {
                 document.getElementById('totalPrice').innerText = finalPricing
 
                 // prints each price
-                descriptionPrice.innerText = data.price
+                console.log(data.name + " price is " + data.price)
             })
 
     }
