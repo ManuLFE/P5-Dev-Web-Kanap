@@ -17,16 +17,15 @@ function getCart() {
     if (cart == null) {
         return [];
     } else {
-
         let cartToSort = JSON.parse(cart);
-        return cartToSort.sort( compare );
+        return cartToSort.sort(compare);
     }
 }
 
 let cart = getCart()
 const mainParentElement = document.getElementById("cart__items")
-
 const elementsInCartId = [];
+
 for (let elements of cart) {
     elementsInCartId.push(elements.id);
 
@@ -66,10 +65,6 @@ for (let elements of cart) {
     const descriptionPrice = document.createElement('p')
     descriptionPrice.setAttribute('id', 'itemPricing_' + elements.id + "_" + elements.color)
     divDescription.appendChild(descriptionPrice)
-    /*fetch('http://localhost:3000/api/products/' + elements.id)
-        .then((response) => response.json())
-        .then((data) => descriptionPrice.innerText = `${data.price}€`)
-    // ajouter id pour appendChild dans renderPricing() + supprimer prix précédent si afficher (avec paramètre dans renderPricing() par exemple*/
 
     const divContentSettings = document.createElement('div')
     divContentSettings.classList.add('cart__item__content__settings')
@@ -133,6 +128,7 @@ renderPricing = () => {
     const initialPricing = 0;
     let totalPricing = [];
     let finalPricing = 0;
+    document.getElementById('totalPrice').innerText = '0'
 
     for (let elements of cart) {
         let elementQuantity = elements.quantity
@@ -158,6 +154,8 @@ renderQuantity = () => {
     let cart = getCart();
     let totalQuantity = [];
     let finalQuantity = 0;
+    let finalQuantityEl = document.getElementById('totalQuantity');
+    finalQuantityEl.innerText = '0';
 
     for (let elements of cart) {
         let productQuantity = elements.quantity
@@ -165,6 +163,11 @@ renderQuantity = () => {
         finalQuantity = totalQuantity.reduce((preValue, curValue) => parseInt(preValue) + parseInt(curValue))
         document.getElementById('totalQuantity').innerHTML = finalQuantity
     }
+
+    if (finalQuantityEl.innerText === '0') {
+        document.getElementsByTagName('h1')[0].innerHTML += '<br> (vide, malheureusement...)'
+    }
+
     saveCart(cart);
 }
 
@@ -199,7 +202,7 @@ document.getElementById('firstName').addEventListener('change', function() {
 })
 
 // REGEX - lastName
-function validatelastName(name) {
+function validateLastName(name) {
     let answerTest
     let re = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð '-]+$/u
     answerTest = re.test(name)
@@ -217,7 +220,7 @@ function validatelastName(name) {
 
 document.getElementById('lastName').addEventListener('change', function() {
     let lastNameEl = document.getElementById('lastName');
-    validatelastName(lastNameEl.value);
+    validateLastName(lastNameEl.value);
 })
 
 // REGEX - address
@@ -320,7 +323,7 @@ sendForm = async() => {
         let result = await response.json();
         let orderId = result.orderId;
         location.href = '../html/confirmation.html?id=' + orderId;
-        alert(orderId);
+        alert('Votre commande n° ' + orderId + ' a bien été validée');
 
     } else {
         console.log('error')

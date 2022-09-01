@@ -30,8 +30,4 @@
             newArticle.appendChild(newText)
         }
 
-    for (let element of value) {
-        console.log("Boucle for:" + element.name);
-    }
-
 })();
