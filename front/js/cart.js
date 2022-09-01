@@ -2,13 +2,24 @@ function saveCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// SORT CART WITH LOCALCOMPARE or SORT ?
+function compare( a, b ) {
+    if ( a.name < b.name ){
+        return -1;
+    }
+    if ( a.name > b.name ){
+        return 1;
+    }
+    return 0;
+}
+
 function getCart() {
     let cart = localStorage.getItem("cart");
     if (cart == null) {
         return [];
     } else {
-        return JSON.parse(cart);
+
+        let cartToSort = JSON.parse(cart);
+        return cartToSort.sort( compare );
     }
 }
 
@@ -52,9 +63,8 @@ for (let elements of cart) {
     descriptionColor.innerText = elements.color
     divDescription.appendChild(descriptionColor)
 
-   const descriptionPrice = document.createElement('p')
-    descriptionPrice.setAttribute('id', 'itemPricing')
-    descriptionPrice.innerText = 'placeholder'
+    const descriptionPrice = document.createElement('p')
+    descriptionPrice.setAttribute('id', 'itemPricing_' + elements.id + "_" + elements.color)
     divDescription.appendChild(descriptionPrice)
     /*fetch('http://localhost:3000/api/products/' + elements.id)
         .then((response) => response.json())
@@ -84,13 +94,12 @@ for (let elements of cart) {
 
     // Event listener 'change'
     quantityInput.addEventListener('change', function() {
-        elements.quantity = quantityInput.value
-        quantityParagraph.innerText = `Qté: ${JSON.parse(elements.quantity)}`
+            elements.quantity = quantityInput.value
+            quantityParagraph.innerText = `Qté: ${JSON.parse(elements.quantity)}`
 
+        saveCart(cart)
         renderPricing()
         renderQuantity()
-        saveCart(cart)
-
     })
 
     // Delete div + delete clickable 'p'
@@ -105,7 +114,7 @@ for (let elements of cart) {
 
     deleteItemEl.addEventListener('click', function () {
         let cart = getCart();
-        cart = cart.filter(p => p.id !== elements.id)
+        cart = cart.filter(p => p.id !== elements.id) && cart.filter(e => e.color  !== elements.color)
 
         renderPricing();
         renderQuantity();
@@ -125,24 +134,20 @@ renderPricing = () => {
     let totalPricing = [];
     let finalPricing = 0;
 
-
     for (let elements of cart) {
         let elementQuantity = elements.quantity
-
-        document.getElementsByClassName('itemDiv')[0].style.border = '3px solid red'
-        document.getElementsByClassName('itemDiv')[1].style.border = '3px solid green'
 
         fetch('http://localhost:3000/api/products/' + elements.id)
             .then((response) => response.json())
             .then((data) => {
+                let localPrice = document.getElementById('itemPricing_' + elements.id + "_" + elements.color);
+                localPrice.innerText = data.price + " €";
                 // Set the final pricing by adding all the product prices together
                 elementPrice = data.price * elementQuantity
                 totalPricing.push(elementPrice)
                 finalPricing = totalPricing.reduce((previousValue, currentValue) => previousValue + currentValue, initialPricing)
                 document.getElementById('totalPrice').innerText = finalPricing
 
-                // prints each price
-                console.log(data.name + " price is " + data.price)
             })
 
     }
@@ -160,15 +165,16 @@ renderQuantity = () => {
         finalQuantity = totalQuantity.reduce((preValue, curValue) => parseInt(preValue) + parseInt(curValue))
         document.getElementById('totalQuantity').innerHTML = finalQuantity
     }
+    saveCart(cart);
 }
 
-    //---------------- END - FUNCTIONS ----------------//
+//---------------- END - FUNCTIONS ----------------//
 
 // Initialize pricing and quantity at page load
 renderPricing()
 renderQuantity()
 
-    //---------------- REGEX - FORM ----------------//
+//---------------- REGEX - FORM ----------------//
 
 // REGEX - firstName
 function validateFirstName(name) {
@@ -280,16 +286,15 @@ document.getElementById('email').addEventListener('change', function() {
     validateEmail(emailEl.value);
 })
 
-    //---------------- Submit Button Behavior ----------------//
+//---------------- Submit Button Behavior ----------------//
 sendForm = async() => {
     let userData = {};
     if (document.getElementById('firstName').value && document.getElementById('lastName').value && document.getElementById('address').value && document.getElementById('city').value && document.getElementById('email').value )
     {
-        // location.href = '../html/confirmation.html'
 
-        let productIDs = [];
+        let productID = [];
         for(let elements of getCart()) {
-            productIDs.push(elements.id);
+            productID.push(elements.id);
         }
 
         userData = {
@@ -300,7 +305,7 @@ sendForm = async() => {
                 city: document.getElementById('city').value,
                 email: document.getElementById('email').value
             },
-            "products": productIDs
+            "products": productID
         }
 
         // POST request to API
@@ -309,19 +314,21 @@ sendForm = async() => {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
-            body: userData
+            body: JSON.stringify(userData)
         });
 
-        let result = response.json();
-        alert(result.message);
+        let result = await response.json();
+        let orderId = result.orderId;
+        location.href = '../html/confirmation.html?id=' + orderId;
+        alert(orderId);
 
     } else {
         console.log('error')
     }
 }
 
-let orderButtonEl = document.getElementsByClassName('cart__order__form')[0]
-orderButtonEl.addEventListener('submit', sendForm)
+let orderButtonEl = document.getElementById('order')
+orderButtonEl.addEventListener('click', sendForm)
 
 
 
