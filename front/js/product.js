@@ -1,4 +1,3 @@
-
 let url= new URL(window.location.href);
 let params = new URLSearchParams(url.search);
 let product_id = params.get('id');
@@ -53,22 +52,22 @@ function addCart(currentProduct) {
     const quantityEl = document.getElementById("quantity")
 
 
-        document.querySelector('title').textContent =  `${value.name}`;
+        document.querySelector('title').textContent =  value.name;
 
         const productImage = document.createElement('img');
-        productImage.src = `${value.imageUrl}`;
-        productImage.alt = `${value.altTxt}`;
+        productImage.src = value.imageUrl;
+        productImage.alt = value.altTxt;
         imgParentEl.appendChild(productImage)
 
-        titleEl.innerText = `${value.name}`
-        priceEl.innerText = `${value.price}`
-        descriptionEl.innerText = `${value.description}`
+        titleEl.innerText = value.name
+        priceEl.innerText = value.price
+        descriptionEl.innerText = value.description
 
         // Loop for iterating over the colors array in the API response //
         for (let color of value.colors) {
             const productColors = document.createElement('option');
-            productColors.innerText = `${color}`;
-            productColors.value = `${color}`;
+            productColors.innerText = color;
+            productColors.value = color;
             colorsEl.appendChild(productColors);
         }
 
