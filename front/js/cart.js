@@ -3,10 +3,10 @@ function saveCart(cart) {
 }
 
 function compare( a, b ) {
-    if ( a.name < b.name ){
+    if ( a.name_color < b.name_color ){
         return -1;
     }
-    if ( a.name > b.name ){
+    if ( a.name_color > b.name_color ){
         return 1;
     }
     return 0;
@@ -178,6 +178,17 @@ renderPricing()
 renderQuantity()
 
 //---------------- REGEX - FORM ----------------//
+let regexChecker = {
+    isFirstNameValid: false,
+    isLastNameValid: false,
+    isAddressValid: false,
+    isCityValid: false,
+    isEmailValid: false
+}
+
+const regexResult = Object.values(regexChecker).every(
+    value => value === true
+);
 
 // REGEX - firstName
 function validateFirstName(name) {
@@ -193,6 +204,7 @@ function validateFirstName(name) {
     } else if (answerTest === true) {
         document.getElementById('firstName').style.border = '3px solid limegreen'
         document.getElementById('firstNameErrorMsg').style.display = 'none';
+        regexChecker.isFirstNameValid = true;
     }
 }
 
@@ -215,6 +227,7 @@ function validateLastName(name) {
     } else if (answerTest === true) {
         document.getElementById('lastName').style.border = '3px solid limegreen'
         document.getElementById('lastNameErrorMsg').style.display = 'none';
+        regexChecker.isLastNameValid = true;
     }
 }
 
@@ -237,6 +250,7 @@ function validateAddress(address) {
     } else if (answerTest === true) {
         document.getElementById('address').style.border = '3px solid limegreen'
         document.getElementById('addressErrorMsg').style.display = 'none';
+        regexChecker.isAddressValid = true;
     }
 }
 
@@ -259,6 +273,7 @@ function validateCity(city) {
     } else if (answerTest === true) {
         document.getElementById('city').style.border = '3px solid limegreen'
         document.getElementById('cityErrorMsg').style.display = 'none';
+        regexChecker.isCityValid = true
     }
 }
 
@@ -281,6 +296,7 @@ function validateEmail(email) {
     } else if (answerTest === true) {
         document.getElementById('email').style.border = '3px solid limegreen'
         document.getElementById('emailErrorMsg').style.display = 'none';
+        regexChecker.isEmailValid = true;
     }
 }
 
@@ -292,7 +308,7 @@ document.getElementById('email').addEventListener('change', function() {
 //---------------- Submit Button Behavior ----------------//
 sendForm = async() => {
     let userData = {};
-    if (document.getElementById('firstName').value && document.getElementById('lastName').value && document.getElementById('address').value && document.getElementById('city').value && document.getElementById('email').value )
+    if (regexResult === true)
     {
 
         let productID = [];

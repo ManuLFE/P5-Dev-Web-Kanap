@@ -81,7 +81,8 @@ function addCart(currentProduct) {
             color: document.getElementById("colors").value,
             quantity: document.getElementById("quantity").value,
             imageUrl: value.imageUrl,
-            imageAlt: value.altTxt
+            imageAlt: value.altTxt,
+            name_color: `${value.name}_${document.getElementById("colors").value}`
         });
 
         if (quantityEl.value === '1') {

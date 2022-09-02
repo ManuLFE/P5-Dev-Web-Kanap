@@ -28,8 +28,6 @@
         newArticle.appendChild(newImage)
         newArticle.appendChild(newTitle)
         newArticle.appendChild(newText)
-
     }
-
 
 })();
