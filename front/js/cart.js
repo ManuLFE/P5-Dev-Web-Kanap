@@ -184,11 +184,8 @@ let regexChecker = {
     isAddressValid: false,
     isCityValid: false,
     isEmailValid: false
-}
+};
 
-const regexResult = Object.values(regexChecker).every(
-    value => value === true
-);
 
 // REGEX - firstName
 function validateFirstName(name) {
@@ -201,6 +198,7 @@ function validateFirstName(name) {
         document.getElementById('firstNameErrorMsg').innerText = 'Prénom Invalide'
         document.getElementById('firstNameErrorMsg').style.display = 'block';
         document.getElementById('firstNameErrorMsg').style.fontWeight = '600';
+        regexChecker.isFirstNameValid = false;
     } else if (answerTest === true) {
         document.getElementById('firstName').style.border = '3px solid limegreen'
         document.getElementById('firstNameErrorMsg').style.display = 'none';
@@ -224,6 +222,7 @@ function validateLastName(name) {
         document.getElementById('lastNameErrorMsg').innerText = 'Nom Invalide'
         document.getElementById('lastNameErrorMsg').style.display = 'block';
         document.getElementById('lastNameErrorMsg').style.fontWeight = '600';
+        regexChecker.isLastNameValid = false;
     } else if (answerTest === true) {
         document.getElementById('lastName').style.border = '3px solid limegreen'
         document.getElementById('lastNameErrorMsg').style.display = 'none';
@@ -247,6 +246,8 @@ function validateAddress(address) {
         document.getElementById('addressErrorMsg').innerText = 'Adresse Invalide'
         document.getElementById('addressErrorMsg').style.display = 'block';
         document.getElementById('addressErrorMsg').style.fontWeight = '600';
+        regexChecker.isAddressValid = false;
+
     } else if (answerTest === true) {
         document.getElementById('address').style.border = '3px solid limegreen'
         document.getElementById('addressErrorMsg').style.display = 'none';
@@ -270,6 +271,7 @@ function validateCity(city) {
         document.getElementById('cityErrorMsg').innerText = 'Nom De Ville Invalide'
         document.getElementById('cityErrorMsg').style.display = 'block';
         document.getElementById('cityErrorMsg').style.fontWeight = '600';
+        regexChecker.isCityValid = false;
     } else if (answerTest === true) {
         document.getElementById('city').style.border = '3px solid limegreen'
         document.getElementById('cityErrorMsg').style.display = 'none';
@@ -293,6 +295,8 @@ function validateEmail(email) {
         document.getElementById('emailErrorMsg').innerText = 'Email Invalide'
         document.getElementById('emailErrorMsg').style.display = 'block';
         document.getElementById('emailErrorMsg').style.fontWeight = '600';
+        regexChecker.isEmailValid = false;
+
     } else if (answerTest === true) {
         document.getElementById('email').style.border = '3px solid limegreen'
         document.getElementById('emailErrorMsg').style.display = 'none';
@@ -307,6 +311,9 @@ document.getElementById('email').addEventListener('change', function() {
 
 //---------------- Submit Button Behavior ----------------//
 sendForm = async() => {
+    const regexResult = Object.values(regexChecker).every(
+        value => value === true
+    );
     let userData = {};
     if (regexResult === true)
     {
