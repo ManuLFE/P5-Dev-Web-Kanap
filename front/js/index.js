@@ -1,4 +1,6 @@
+//---------------- DISPLAYING PRODUCT ----------------//
 
+// Asynchronous function, waiting for the API fetch to return a result. Once the result is loaded, iterate through the API result to display all the products present in the API and their information.
 (async () => {
     const result = await fetch("http://localhost:3000/api/products");
     const value = await result.json();
@@ -31,3 +33,5 @@
     }
 
 })();
+
+//---------------- DISPLAYING PRODUCT - END ----------------//

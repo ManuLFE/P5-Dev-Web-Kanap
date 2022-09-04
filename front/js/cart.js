@@ -1,7 +1,11 @@
+//---------------- CART FUNCTIONS ----------------//
+
+// Saves the cart to localStorage
 function saveCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+// Compares the property name "name_color" of an object and sort them alphabetically
 function compare( a, b ) {
     if ( a.name_color < b.name_color ){
         return -1;
@@ -12,6 +16,7 @@ function compare( a, b ) {
     return 0;
 }
 
+// Returns the cart item from the localStorage in alphabetical order, if empty, returns an empty array.
 function getCart() {
     let cart = localStorage.getItem("cart");
     if (cart == null) {
@@ -22,10 +27,21 @@ function getCart() {
     }
 }
 
+//---------------- CART FUNCTIONS - END ----------------//
+
+
+//---------------- GLOBAL VARIABLES ----------------//
+
 let cart = getCart()
 const mainParentElement = document.getElementById("cart__items")
 const elementsInCartId = [];
 
+//---------------- GLOBAL VARIABLES - END ----------------//
+
+
+//---------------- DOM ELEMENT CREATION ----------------//
+
+// Iterates through the cart to create all the elements in the DOM to display the products. Also pushes each product id to the array "elementsInCartId" as it will be required later for the POST request to the API.
 for (let elements of cart) {
     elementsInCartId.push(elements.id);
 
@@ -52,7 +68,6 @@ for (let elements of cart) {
     divDescription.classList.add('cart__item__content__description')
     divDescription.setAttribute(`class`,`itemDiv`);
     divContent.appendChild(divDescription)
-    // ajouter id pour appendChild dans renderPricing()
 
     const descriptionTitle = document.createElement('h2')
     descriptionTitle.innerText = elements.name
@@ -87,7 +102,7 @@ for (let elements of cart) {
     quantityInput.value = elements.quantity
     divContentSettings.appendChild(quantityInput)
 
-    // Event listener 'change'
+    // Adds the possibility to change a product quantity and save it in the cart by using the input type "number"
     quantityInput.addEventListener('change', function() {
             elements.quantity = quantityInput.value
             quantityParagraph.innerText = `Qté: ${JSON.parse(elements.quantity)}`
@@ -97,7 +112,7 @@ for (let elements of cart) {
         renderQuantity()
     })
 
-    // Delete div + delete clickable 'p'
+    // Creates a clickable "p" element to delete any selected product
     const settingsDelete = document.createElement('div')
     settingsDelete.classList.add('cart__item__content__settings__delete')
     divContentSettings.appendChild(settingsDelete)
@@ -107,10 +122,10 @@ for (let elements of cart) {
     deleteItemEl.innerText = 'supprimer'
     settingsDelete.appendChild(deleteItemEl)
 
+    // Adds a function to delete a displayed product and saves the cart, also recalculate final pricing and final quantity.
     deleteItemEl.addEventListener('click', function () {
         let cart = getCart();
         cart = cart.filter(p => p.id !== elements.id) && cart.filter(e => e.color  !== elements.color)
-
         renderPricing();
         renderQuantity();
         saveCart(cart);
@@ -119,7 +134,10 @@ for (let elements of cart) {
 
 }
 
-//---------------- FUNCTIONS ----------------//
+//---------------- DOM ELEMENT CREATION - END ----------------//
+
+
+//---------------- RENDER FUNCTIONS ----------------//
 
 // Render pricing for each product before reducing it to display the final pricing
 renderPricing = () => {
@@ -171,13 +189,17 @@ renderQuantity = () => {
     saveCart(cart);
 }
 
-//---------------- END - FUNCTIONS ----------------//
+//---------------- RENDER FUNCTIONS - END ----------------//
+
 
 // Initialize pricing and quantity at page load
 renderPricing()
 renderQuantity()
 
+
 //---------------- REGEX - FORM ----------------//
+
+// Define an object containing the output from the tested regex.
 let regexChecker = {
     isFirstNameValid: false,
     isLastNameValid: false,
@@ -185,7 +207,6 @@ let regexChecker = {
     isCityValid: false,
     isEmailValid: false
 };
-
 
 // REGEX - firstName
 function validateFirstName(name) {
@@ -309,7 +330,12 @@ document.getElementById('email').addEventListener('change', function() {
     validateEmail(emailEl.value);
 })
 
-//---------------- Submit Button Behavior ----------------//
+//---------------- REGEX FORM - END ----------------//
+
+
+//---------------- SUBMIT BUTTON BEHAVIOR ----------------//
+
+// Asynchronous function awaiting fetch answer from the API. Creates an object userData containing required information necessary in the POST request for the API to reply with an unique order_id. Only triggers the sending if all the regex have been passed successfully (checked by using the variable "regexResult").
 sendForm = async() => {
     const regexResult = Object.values(regexChecker).every(
         value => value === true
@@ -346,15 +372,17 @@ sendForm = async() => {
         let result = await response.json();
         let orderId = result.orderId;
         location.href = '../html/confirmation.html?id=' + orderId;
-        alert('Votre commande n° ' + orderId + ' a bien été validée');
+        alert('Nous vous remercions de votre commande ! Celle ci porte le n° ' + orderId + ', vous recevrez bientôt un e-mail de confirmation.');
 
     } else {
-        console.log('error')
+        alert('Error, please try again')
     }
 }
 
 let orderButtonEl = document.getElementById('order')
 orderButtonEl.addEventListener('click', sendForm)
+
+//---------------- SUBMIT BUTTON BEHAVIOR - END ----------------//
 
 
 
