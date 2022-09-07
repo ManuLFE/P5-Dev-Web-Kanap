@@ -380,8 +380,10 @@ sendForm = async() => {
 }
 
 let orderButtonEl = document.getElementById('order')
-orderButtonEl.addEventListener('click', sendForm)
-
+orderButtonEl.addEventListener('click', function (e) {
+    e.preventDefault();
+    sendForm();
+});
 //---------------- SUBMIT BUTTON BEHAVIOR - END ----------------//
 
 
