@@ -68,7 +68,8 @@ function addCart(currentProduct) {
     priceEl.innerText = value.price
     descriptionEl.innerText = value.description
 
-    // Loop for iterating over the colors array in the API response to display all the existing colors
+    // Loop for iterating over the colors array in the API response to display all the existing colors and makes it a required input
+        colorsEl.required = 'true'
         for (let color of value.colors) {
             const productColors = document.createElement('option');
             productColors.innerText = color;
@@ -98,6 +99,28 @@ function addCart(currentProduct) {
             console.log("pluriel")
         }
     })
+
+    // Uses the minimum and max values of the HTML element to prevent manually entering numbers outside the defined range
+    let rangeQuantityEl = document.getElementById('quantity')
+    rangeQuantityEl.required = 'true'
+    rangeQuantityEl.value = '1'
+    function enforceMinMax(rangeQuantityEl){
+        if(rangeQuantityEl.value !== ""){
+            if(parseInt(rangeQuantityEl.value) < parseInt(rangeQuantityEl.min)){
+                rangeQuantityEl.value = rangeQuantityEl.min;
+            }
+            if(parseInt(rangeQuantityEl.value) > parseInt(rangeQuantityEl.max)){
+                rangeQuantityEl.value = rangeQuantityEl.max;
+            }
+        }
+    }
+
+    // Triggers the min and max values on "keyup" when entering a number manually
+    quantityEl.addEventListener('keyup', function()
+    {
+       enforceMinMax(rangeQuantityEl)
+    })
+
 })();
 
 //---------------- DISPLAYING PRODUCT - END ----------------//

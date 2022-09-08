@@ -126,10 +126,11 @@ for (let elements of cart) {
     deleteItemEl.addEventListener('click', function () {
         let cart = getCart();
         cart = cart.filter(p => p.id !== elements.id) && cart.filter(e => e.color  !== elements.color)
+        mainParentElement.removeChild(newArticle)
+
+        saveCart(cart);
         renderPricing();
         renderQuantity();
-        saveCart(cart);
-        window.location.reload();
     })
 
 }
@@ -337,45 +338,49 @@ document.getElementById('email').addEventListener('change', function() {
 
 // Asynchronous function awaiting fetch answer from the API. Creates an object userData containing required information necessary in the POST request for the API to reply with an unique order_id. Only triggers the sending if all the regex have been passed successfully (checked by using the variable "regexResult").
 sendForm = async() => {
-    const regexResult = Object.values(regexChecker).every(
-        value => value === true
-    );
-    let userData = {};
-    if (regexResult === true)
-    {
 
-        let productID = [];
-        for(let elements of getCart()) {
-            productID.push(elements.id);
+    if (cart.length === 0) {
+        alert('panier vide')
+    } else if (cart.length !== 0) {
+        const regexResult = Object.values(regexChecker).every(
+            value => value === true
+        );
+        let userData = {};
+        if (regexResult === true) {
+
+            let productID = [];
+            for (let elements of getCart()) {
+                productID.push(elements.id);
+            }
+
+            userData = {
+                "contact": {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    address: document.getElementById('address').value,
+                    city: document.getElementById('city').value,
+                    email: document.getElementById('email').value
+                },
+                "products": productID
+            }
+
+            // POST request to API
+            let response = await fetch('http://localhost:3000/api/products/order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(userData)
+            });
+
+            let result = await response.json();
+            let orderId = result.orderId;
+            location.href = '../html/confirmation.html?id=' + orderId;
+            alert('Nous vous remercions de votre commande ! Celle ci porte le n° ' + orderId + ', vous recevrez bientôt un e-mail de confirmation.');
+
+        } else {
+            alert('Error, please try again')
         }
-
-        userData = {
-            "contact": {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                address: document.getElementById('address').value,
-                city: document.getElementById('city').value,
-                email: document.getElementById('email').value
-            },
-            "products": productID
-        }
-
-        // POST request to API
-        let response = await fetch('http://localhost:3000/api/products/order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(userData)
-        });
-
-        let result = await response.json();
-        let orderId = result.orderId;
-        location.href = '../html/confirmation.html?id=' + orderId;
-        alert('Nous vous remercions de votre commande ! Celle ci porte le n° ' + orderId + ', vous recevrez bientôt un e-mail de confirmation.');
-
-    } else {
-        alert('Error, please try again')
     }
 }
 
