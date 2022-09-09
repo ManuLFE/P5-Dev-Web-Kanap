@@ -202,129 +202,53 @@ renderQuantity()
 
 // Define an object containing the output from the tested regex.
 let regexChecker = {
-    isFirstNameValid: false,
-    isLastNameValid: false,
-    isAddressValid: false,
-    isCityValid: false,
-    isEmailValid: false
+    is_firstName_valid: false,
+    is_lastName_valid: false,
+    is_address_valid: false,
+    is_city_valid: false,
+    is_email_valid: false
 };
 
-// REGEX - firstName
-function validateFirstName(name) {
-    let answerTest
-    let re = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð '-]+$/u
-    answerTest = re.test(name)
+function validateRegex(id, regex) {
+    let value = document.getElementById(id).value;
+    let answerTest = regex.test(value);
 
+    console.log(id);
     if (answerTest === false) {
-        document.getElementById('firstName').style.border = '3px solid red'
-        document.getElementById('firstNameErrorMsg').innerText = 'Prénom Invalide'
-        document.getElementById('firstNameErrorMsg').style.display = 'block';
-        document.getElementById('firstNameErrorMsg').style.fontWeight = '600';
-        regexChecker.isFirstNameValid = false;
+        document.getElementById(id).style.border = '3px solid red'
+        document.getElementById(id + 'ErrorMsg').innerText = id + ' Invalide'
+        document.getElementById(id + 'ErrorMsg').style.display = 'block';
+        document.getElementById(id + 'ErrorMsg').style.fontWeight = '600';
+        regexChecker["is_"+ id +"_valid"] = false;
     } else if (answerTest === true) {
-        document.getElementById('firstName').style.border = '3px solid limegreen'
-        document.getElementById('firstNameErrorMsg').style.display = 'none';
-        regexChecker.isFirstNameValid = true;
+        document.getElementById(id).style.border = '3px solid limegreen'
+        document.getElementById(id + 'ErrorMsg').style.display = 'none';
+        regexChecker["is_"+ id +"_valid"] = true;
     }
+
+    return answerTest;
 }
 
-document.getElementById('firstName').addEventListener('change', function() {
-    let firstNameEl = document.getElementById('firstName');
-    validateFirstName(firstNameEl.value);
+let regexRules = {
+    'common': /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð '-]+$/u,
+    'email': /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
+}
+
+document.getElementById('lastName').addEventListener('change', function () {
+    validateRegex('lastName', regexRules.common);
 })
-
-// REGEX - lastName
-function validateLastName(name) {
-    let answerTest
-    let re = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð '-]+$/u
-    answerTest = re.test(name)
-
-    if (answerTest === false) {
-        document.getElementById('lastName').style.border = '3px solid red'
-        document.getElementById('lastNameErrorMsg').innerText = 'Nom Invalide'
-        document.getElementById('lastNameErrorMsg').style.display = 'block';
-        document.getElementById('lastNameErrorMsg').style.fontWeight = '600';
-        regexChecker.isLastNameValid = false;
-    } else if (answerTest === true) {
-        document.getElementById('lastName').style.border = '3px solid limegreen'
-        document.getElementById('lastNameErrorMsg').style.display = 'none';
-        regexChecker.isLastNameValid = true;
-    }
-}
-
-document.getElementById('lastName').addEventListener('change', function() {
-    let lastNameEl = document.getElementById('lastName');
-    validateLastName(lastNameEl.value);
+document.getElementById('firstName').addEventListener('change', function () {
+    validateRegex('firstName', regexRules.common);
 })
-
-// REGEX - address
-function validateAddress(address) {
-    let answerTest
-    let re = /^(\d+) ([a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð '-]+) [ -_+]?(\w{0,8})/
-    answerTest = re.test(address)
-
-    if (answerTest === false) {
-        document.getElementById('address').style.border = '3px solid red'
-        document.getElementById('addressErrorMsg').innerText = 'Adresse Invalide'
-        document.getElementById('addressErrorMsg').style.display = 'block';
-        document.getElementById('addressErrorMsg').style.fontWeight = '600';
-        regexChecker.isAddressValid = false;
-
-    } else if (answerTest === true) {
-        document.getElementById('address').style.border = '3px solid limegreen'
-        document.getElementById('addressErrorMsg').style.display = 'none';
-        regexChecker.isAddressValid = true;
-    }
-}
-
-document.getElementById('address').addEventListener('change', function() {
-    let addressEl = document.getElementById('address');
-    validateAddress(addressEl.value);
+document.getElementById('address').addEventListener('change', function () {
+    validateRegex('address', regexRules.common);
 })
-
-// REGEX - city
-function validateCity(city) {
-    let answerTest
-    let re = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u
-    answerTest = re.test(city)
-
-    if (answerTest === false) {
-        document.getElementById('city').style.border = '3px solid red'
-        document.getElementById('cityErrorMsg').innerText = 'Nom De Ville Invalide'
-        document.getElementById('cityErrorMsg').style.display = 'block';
-        document.getElementById('cityErrorMsg').style.fontWeight = '600';
-        regexChecker.isCityValid = false;
-    } else if (answerTest === true) {
-        document.getElementById('city').style.border = '3px solid limegreen'
-        document.getElementById('cityErrorMsg').style.display = 'none';
-        regexChecker.isCityValid = true
-    }
-}
-
-document.getElementById('city').addEventListener('change', function() {
-    let cityEl = document.getElementById('city');
-    validateCity(cityEl.value);
+document.getElementById('city').addEventListener('change', function () {
+    validateRegex('city', regexRules.common);
 })
-
-// REGEX - email
-function validateEmail(email) {
-    let answerTest
-    let re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
-    answerTest = re.test(email)
-
-    if (answerTest === false) {
-        document.getElementById('email').style.border = '3px solid red'
-        document.getElementById('emailErrorMsg').innerText = 'Email Invalide'
-        document.getElementById('emailErrorMsg').style.display = 'block';
-        document.getElementById('emailErrorMsg').style.fontWeight = '600';
-        regexChecker.isEmailValid = false;
-
-    } else if (answerTest === true) {
-        document.getElementById('email').style.border = '3px solid limegreen'
-        document.getElementById('emailErrorMsg').style.display = 'none';
-        regexChecker.isEmailValid = true;
-    }
-}
+document.getElementById('email').addEventListener('change', function () {
+    validateRegex('email', regexRules.email);
+})
 
 document.getElementById('email').addEventListener('change', function() {
     let emailEl = document.getElementById('email');
