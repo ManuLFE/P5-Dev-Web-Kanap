@@ -258,6 +258,7 @@ document.getElementById('email').addEventListener('change', function () {
 //---------------- REGEX FORM - END ----------------//
 
 
+
 //---------------- SUBMIT BUTTON BEHAVIOR ----------------//
 
 // Asynchronous function awaiting fetch answer from the API. Creates an object userData containing required information necessary in the POST request for the API to reply with an unique order_id. Only triggers the sending if all the regex have been passed successfully (checked by using the variable "regexResult").
