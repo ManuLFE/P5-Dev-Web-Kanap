@@ -201,6 +201,9 @@ renderQuantity()
 //---------------- REGEX - FORM ----------------//
 
 // Define an object containing the output from the tested regex.
+//---------------- REGEX - FORM ----------------//
+
+// Define an object containing the output from the tested regex.
 let regexChecker = {
     is_firstName_valid: false,
     is_lastName_valid: false,
@@ -231,7 +234,9 @@ function validateRegex(id, regex) {
 
 let regexRules = {
     'common': /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð '-]+$/u,
+    'address': /^(\d+) ([a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð '-]+) [ -_+]?(\w{0,8})/,
     'email': /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
+
 }
 
 document.getElementById('lastName').addEventListener('change', function () {
@@ -241,18 +246,13 @@ document.getElementById('firstName').addEventListener('change', function () {
     validateRegex('firstName', regexRules.common);
 })
 document.getElementById('address').addEventListener('change', function () {
-    validateRegex('address', regexRules.common);
+    validateRegex('address', regexRules.address);
 })
 document.getElementById('city').addEventListener('change', function () {
     validateRegex('city', regexRules.common);
 })
 document.getElementById('email').addEventListener('change', function () {
     validateRegex('email', regexRules.email);
-})
-
-document.getElementById('email').addEventListener('change', function() {
-    let emailEl = document.getElementById('email');
-    validateEmail(emailEl.value);
 })
 
 //---------------- REGEX FORM - END ----------------//
